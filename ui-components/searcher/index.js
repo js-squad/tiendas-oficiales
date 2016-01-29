@@ -93,5 +93,10 @@
     Searcher.prototype.destroy = function() {
     };
 
+    // it should return the value of the component
+    // hint: which node has value?
+    Searcher.prototype.getValue = function() {
+    };
+
     uiComponents.Searcher = Searcher;
 });

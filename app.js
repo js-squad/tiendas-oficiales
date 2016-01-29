@@ -30,7 +30,7 @@
           filter: function(ranges) {
               exports.components.ui.clearNodeInnerHTML(listItemContainer);
               exports.components.api.search({
-                data: searchInput.value,
+                data: searcher.getValue(),
                 price: ranges.min + '-' + ranges.max
               }).then(function(result) {
                 insertResults(result.results);
