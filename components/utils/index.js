@@ -15,6 +15,7 @@
     // it should return true if the received parameter is an object
     // and is distinct to null or return false otherwise
     function isObject(thing) {
+        return (typeof thing === "object") && (thing !== null);
     }
 
     function ensureIsArray(name, value) {
@@ -72,11 +73,19 @@
     // should be avoided in the resulting string
     // example: getQueryStr({ a: 1, b:'hola'}); // -> 'a=1&b=hola'
     function getQueryStr(obj) {
+        var aux = [];
+
+        for (key in obj) {
+            if (obj[key] !== undefined) {
+                aux.push(key + '=' + obj[key]);
+            }
+        }
+        return aux.join('&');
     }
 
 
     // it should return the HTML element filled up with the
-    // correct values. each mapping is marked as 
+    // correct values. each mapping is marked as
     // '{{item.propertyName}}' and should be replaced
     function apiResultToHTML (apiElement) {
         var itemHTML = '<li class="list-item"><div class="item-segment item-image">\
@@ -102,6 +111,11 @@
         </div></li>';
 
         //// add code here ////
+
+        for (item in apiElement) {
+            itemHTML = itemHTML.replace('{{item.' + item + '}}', apiElement[item] || '');
+        }
+        return itemHTML;
     }
 
     exports.isObject = isObject;
