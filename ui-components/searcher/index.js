@@ -79,16 +79,24 @@
     // hint2: use the result of the internal method 'getDomListeners'
     // to invoke the ui method
     function Searcher(nodes, listeners) {
-
         ensureNodes(nodes);
         ensureListeners(listeners);
 
         //// add code here ////
+        this.nodes = nodes;
+        this.listeners = getDomListeners(nodes, listeners);
+
+        utils.registerDomListeners(this.listeners);
     }
 
     // it should remove the listeners added on the constructor
     // hint: the ui module has a util method for removing listeners
     Searcher.prototype.destroy = function() {
+        utils.unregisterDomListeners(this.listeners);
+    };
+
+    Searcher.prototype.getValue = function() {
+        return this.nodes.searchInput.value;
     };
 
     uiComponents.Searcher = Searcher;
