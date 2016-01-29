@@ -63,7 +63,6 @@
         );
     }
 
-
     // it should save the parameters 'nodes' and 'listeners'
     // as internal properties of the instance for later use
     // it should also register the corresponding listeners to the DOM

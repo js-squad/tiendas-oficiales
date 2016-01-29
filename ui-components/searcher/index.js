@@ -19,13 +19,26 @@
         keyPressedListener(event.keyCode);
     }
 
-
     // it should return an array like the following
     // [
     //     {
     //         node: node1,
     //         listeners: {
     //             eventName1: listenerWithPartialApplication1
+    //         }
+    //     },
+    //     {
+    //         node: node2,
+    //         listeners: {
+    //             eventName2: listenerWithPartialApplication2
+    //         }
+    //     }
+    // ]
+    // [
+    //     {
+    //         node: SearchButton,
+    //         listeners: {
+    //             'click': onSearchButtonClicked
     //         }
     //     },
     //     {
@@ -45,6 +58,21 @@
     // listener should be 'onSearchKeyPressed' with partial application
     // of the 'listeners.keypress' parameter
     function getDomListeners(nodes, listeners) {
+
+      return [
+        {
+            node: nodes.searchButton,
+            'listeners': {
+              'click' : onSearchButtonClicked.bind(undefined, nodes.searchButton, listeners.search)
+            }
+        },
+        {
+          node: nodes.searchInput,
+            'listeners': {
+              'keypress' : onSearchKeyPressed.bind(undefined, listeners.keypress)
+          }
+        }
+      ]
     }
 
     function ensureListeners(listeners) {
@@ -70,7 +98,6 @@
             nodes
         );
     }
-
 
     // it should save the 'listeners' parameters as internal
     // state of the instance
