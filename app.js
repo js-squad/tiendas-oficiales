@@ -53,12 +53,6 @@
           }).then(function(result) {
             insertResults(result.results);
           });
-        },
-        keypress: function(keyCode) {
-          var click = new CustomEvent('click');
-          if(keyCode === 13) {
-            searchButton.dispatchEvent(click);
-          }
         }
       };
       var searcher = new exports.uiComponents.Searcher(searcherNodes, searcherListeners);
