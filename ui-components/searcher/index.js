@@ -71,7 +71,7 @@
         {
           node: nodes.searchInput,
             'listeners': {
-              'keypress' : onSearchKeyPressed.bind(undefined, listeners.keypress)
+              'keypress' : onSearchKeyPressed.bind(undefined, nodes.searchButton, listeners.search)
           }
         }
       ]
