@@ -15,8 +15,10 @@
         searchListener(searchInput.value);
     }
 
-    function onSearchKeyPressed(keyPressedListener, event) {
-        keyPressedListener(event.keyCode);
+    function onSearchKeyPressed(searchInput, searchListener, event) {
+        if(event.keyCode === 13) {
+            searchListener(searchInput.value);
+        }
     }
 
 
@@ -49,7 +51,7 @@
 
     function ensureListeners(listeners) {
 
-        var eventNames = [ "search", "keypress" ];
+        var eventNames = [ "search" ];
 
         utils.ensureIsObjectAndHasMethods(
             eventNames,
