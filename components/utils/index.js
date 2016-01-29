@@ -112,10 +112,21 @@
 
         //// add code here ////
 
-        for (item in apiElement) {
-            itemHTML = itemHTML.replace('{{item.' + item + '}}', apiElement[item] || '');
-        }
-        return itemHTML;
+        function replace(prop, value, itemHTML) {
+             if (typeof value !== 'object') {
+                 return itemHTML.replace(new RegExp('{{' + prop + '}}', 'g'), value);
+             } else {
+                 var o, targetProp;
+                 for (var key in value) {
+                     if (value.hasOwnProperty(key)) {
+                         targetProp = prop + '.' + key;
+                         itemHTML = replace(targetProp, value[key], itemHTML);
+                     }
+                 }
+                 return itemHTML;
+             }
+         }
+         return replace('item', apiElement, itemHTML);
     }
 
     exports.isObject = isObject;
