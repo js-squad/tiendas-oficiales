@@ -1,15 +1,13 @@
 (function ( root, factory ) {
-  if ( typeof module === "object" && module.exports ) {
-        // Node, or CommonJS-Like environments
-        // Intentionally returning a factory method
-        module.exports = function(app) {
-            return factory(app);
+  if (eval('typeof module') === 'object' && module.exports ) {
+        module.exports = function(utils) {
+            return factory({}, utils);
         };
     } else {
-        // Browser globals
         factory( root.app.components.ui = {}, root, root.app.components.utils );
     }
 })( typeof global !== "undefined" ? global : this.window || this.global, function ( exports, global, utils) {
+    'use strict';
     function getNodeTypeName(nodeType) {
 
         var nodeTypeNames = {};
@@ -68,22 +66,23 @@
             var curNode      = curItem.node;
             var curListeners = curItem.listeners;
 
-            // add or remove, depending on 'operation', from curNode 
-            // every listener in curListeners
+            Object.keys(curListeners).forEach(function(curEventName) {
+                var methodName = operation + "EventListener";
+                curNode[methodName](curEventName, curListeners[curEventName]);
+            });
         });
     }
 
-    // it should clear the input element
     function clearInput(input) {
+        input.value = "";
     }
 
-    // it should receive a node an insert the received HTML 
-    // as the inner HTML of the node
     function insertIntoNode(node, html) {
+        node.innerHTML = node.innerHTML + html;
     }
 
-    // it should clear the node inner HTML
     function clearNodeInnerHTML(node){
+        node.innerHTML = '';
     }
 
     exports.getNodeTypeName = getNodeTypeName;
@@ -95,4 +94,5 @@
     exports.clearInput = clearInput;
     exports.insertIntoNode = insertIntoNode;
     exports.clearNodeInnerHTML = clearNodeInnerHTML;
+    return exports;
 });

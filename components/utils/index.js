@@ -1,20 +1,17 @@
 (function ( root, factory ) {
-  if ( typeof module === "object" && module.exports ) {
-        // Node, or CommonJS-Like environments
-        // Intentionally returning a factory method
-        module.exports = function(app) {
-            return factory(app);
+  if (eval('typeof module') === 'object' && module.exports ) {
+        module.exports = function() {
+            return factory({});
         };
     } else {
-        // Browser globals
         root.app.components = {}; // <- extend
         factory( root.app.components.utils = {}, root );
     }
 })( typeof global !== "undefined" ? global : this.window || this.global, function ( exports, global) {
-
-    // it should return true if the received parameter is an object
-    // and is distinct to null or return false otherwise
+    'use strict';
     function isObject(thing) {
+
+        return thing !== null && typeof thing === "object";
     }
 
     function ensureIsArray(name, value) {
@@ -61,23 +58,23 @@
         ensureIsObject(objectName, object);
 
         methodNames.forEach(function(curMethodName) {
-
             ensureObjectHasMethod(curMethodName, objectName, object);
         });
     }
 
     // it receives an object and returns the string representation of the
     // object in a valid format to be used as querystring
-    // if the value of a key in the received object is 'undefined',
-    // should be avoided in the resulting string
-    // example: getQueryStr({ a: 1, b:'hola'}); // -> 'a=1&b=hola'
     function getQueryStr(obj) {
+        var str = [];
+        Object.keys(obj).forEach(function(key) {
+          if(typeof obj[key] === 'undefined') {
+            return;
+          }
+          str.push(encodeURIComponent(key) + "=" + encodeURIComponent(obj[key]));
+        });
+        return str.join("&");
     }
 
-
-    // it should return the HTML element filled up with the
-    // correct values. each mapping is marked as 
-    // '{{item.propertyName}}' and should be replaced
     function apiResultToHTML (apiElement) {
         var itemHTML = '<li class="list-item"><div class="item-segment item-image">\
           <div class="inner-item-segment">\
@@ -86,7 +83,7 @@
         </div>\
         <div class="item-segment item-name">\
           <div class="inner-item-segment">\
-            <a href="">{{item.title}}</a>\
+            <a href="{{item.permalink}}">{{item.title}}</a>\
           </div>\
         </div>\
         <div class="item-segment item-price">\
@@ -96,12 +93,15 @@
         </div>\
         <div class="item-segment item-additional-info">\
           <div class="inner-item-segment">\
-            <span>{{item.condition}}</span>\
-            <span>{{item.seller_address.state.name}}</span>\
+            <span>{{item.address.state_name}}</span>\
           </div>\
         </div></li>';
 
-        //// add code here ////
+        return itemHTML.replace('{{item.thumbnail}}', apiElement.thumbnail)
+            .replace('{{item.title}}', apiElement.title)
+            .replace('{{item.price}}', apiElement.price)
+            .replace('{{item.permalink}}', apiElement.permalink)
+            .replace('{{item.address.state_name}}', apiElement.seller_address.state.name);
     }
 
     exports.isObject = isObject;
@@ -112,4 +112,6 @@
     exports.ensureIsObjectAndHasMethods = ensureIsObjectAndHasMethods;
     exports.getQueryStr = getQueryStr;
     exports.apiResultToHTML = apiResultToHTML;
+
+    return exports;
 });

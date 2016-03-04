@@ -9,16 +9,16 @@
         // Browser globals
         factory( root.app = {}, root );
     }
-})( typeof global !== "undefined" ? global : this.window || this.global, function ( exports, global) {
+})( typeof global !== "undefined" ? global : this.window || this.global, function (exports, global) {
+    'use strict';
     exports.init = function() {
-      function insertResults(results){
+      function insertResults(results) {
           exports.components.ui.insertIntoNode(listItemContainer,
             results.map(exports.components.utils.apiResultToHTML).join(''));
       }
       var searchInput = document.querySelector('#searchInput');
       var searchButton = document.querySelector('#searchBtn');
       var listItemContainer = document.querySelector('#listItemContainer');
-      var cursor = new app.components.Cursor;
 
       var rangeFilterNodes = {
           minInput: document.querySelector('#priceFilterMin'),
@@ -30,7 +30,7 @@
           filter: function(ranges) {
               exports.components.ui.clearNodeInnerHTML(listItemContainer);
               exports.components.api.search({
-                data: searcher.getValue(),
+                data: searchInput.value,
                 price: ranges.min + '-' + ranges.max
               }).then(function(result) {
                 insertResults(result.results);

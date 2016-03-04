@@ -1,51 +1,53 @@
 (function ( root, factory ) {
-  if ( typeof module === "object" && module.exports ) {
-        // Node, or CommonJS-Like environments
-        // Intentionally returning a factory method
-        module.exports = function(app) {
-            return factory(app);
+  if (eval('typeof module') === 'object' && module.exports ) {
+        module.exports = function(utils) {
+            return factory({}, undefined, utils);
         };
     } else {
-        // Browser globals
         factory( root.app.components.api = {}, root, root.app.components.utils );
     }
-})( typeof global !== "undefined" ? global : this.window || this.global, function ( exports, global, utils) {
+})(typeof global !== "undefined" ? global : this.window || this.global, function ( exports, global, utils) {
+    'use strict';
     var ML_SEARCH_URL = 'https://api.mercadolibre.com/sites/MLA/search';
 
-  // it should receive a parameter 'options' with the keys 'limit', 'offset', 'price'
-  // and 'data'. those keys should be used as querystring parameters to
-  // send a request to ML_SEARCH_URL.
-  // 'data' should map to the string being used for the search.
-  // the method should return a promise
-  // the result should look like the following:
-  // {
-  //   results: [
-  //     elem1,
-  //     elem2,
-  //     ...
-  //     elemN
-  //   ],
-  //   next: {
-  //     data: str,
-  //     limit: 100,
-  //     offset: 0,
-  //     price: 500-7000
-  //   }
-  // }
-  // the values for the 'next' keys should be the same as the ones received
-  // from the API except for the 'offset' key. the returned 'offset' key
-  // should be equal to 'paging.offset' key 
-  // plus 'paging.limit' key (from the API response)
-  // hint 1: use the 'URL' object to create an object representation of a url and
-  // append the querystring (https://gist.github.com/a0viedo/13241ba70489d6e16805)
-  // hint 2: use the fetch API to send a request (https://developers.google.com/web/updates/2015/03/introduction-to-fetch)
-  // hint 3: use the utils method to get a string from a querystring object
     exports.search = function(options) {
-      var qs = {
-        official_store_id: 'all'
-        //// add other keys here
-      };
+        var qs = {
+          limit: options.limit,
+          q: options.data,
+          offset: options.offset,
+          official_store_id: 'all',
+          price: options.price
+        };
 
-      ///// add code here /////
+        var url = new URL(ML_SEARCH_URL);
+        url.search = utils.getQueryStr(qs);
+        console.log(url.toString());
+        return new Promise(function(resolve, reject){
+          fetch(url.toString()).then(function(response) {
+            if(response.status !== 200) {
+              return reject(Error('There was an error. Response:' + response.status));
+            }
+
+            return response.json();
+          }).then(function(responseJSON){
+            var result = {
+              results: responseJSON.results
+            };
+
+            if(responseJSON.paging.offset + responseJSON.paging.limit < responseJSON.paging.total) {
+              result.next = {
+                offset: responseJSON.paging.offset + responseJSON.paging.limit,
+                limit: responseJSON.paging.limit,
+                data: options.data
+              };
+            }
+
+            resolve(result);
+          }).catch(function(err) {
+            console.log('There was an error.', err);
+            reject(err);
+          });
+        });
     };
+    return exports;
 });
