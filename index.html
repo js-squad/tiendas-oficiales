@@ -1,52 +1,13 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Tiendas oficiales</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <header>
-            <input id="searchInput" type="search" placeholder="Buscar...">
-            <button id="searchBtn">Buscar</button>
-        </header>
-        <div id="main">
-            <aside class="aside">
-                <h4>Rango de precios</h4>
-                <div>
-                    <input id="priceFilterMin" class="price-input-filter" type="text" placeholder="min">
-                    <input id="priceFilterMax" class="price-input-filter" type="text" placeholder="max">
-                    <button id="priceFilterBtn">>></button>
-                </div>
-                <h4>O refinar por</h4>
-                <div>
-                    <select name="" id="condition-filter">
-                        <option value="" selected="selected">------</option>
-                        <option value="new">Nuevo</option>
-                        <option value="used">Usado</option>
-                    </select>
-                </div>
-                <h4>Resultados por página</h4>
-                <input type="text" class="page-input-filter">
-                
-            </aside>
-            <div id="content">
-                <ul id="listItemContainer" class="list-container">
-                </ul>
-                <div class="paging-controls-container">
-                    <a href="#"><<</a> | <a href="#">>></a>
-                </div>
-            </div>
-        </div>
-    <footer></footer>
-    <script src="app.js"></script>
-    <script src="components/utils/index.js"></script>
-    <script src="components/ui/index.js"></script>
-    <script src="components/cursor/index.js"></script>
-    <script src="components/api/index.js"></script>
-    <script src="ui-components/pager/index.js"></script>
-    <script src="ui-components/searcher/index.js"></script>
-    <script src="ui-components/range-filter/index.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Tiendas vueficiales</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link rel="icon" href="static/logo.png" type="image/x-icon">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="dist/build.js"></script>
+  </body>
 </html>
